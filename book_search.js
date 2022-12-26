@@ -1,16 +1,3 @@
-/** 
- * RECOMMENDATION
- * 
- * To test your code, you should open "tester.html" in a web browser.
- * You can then use the "Developer Tools" to see the JavaScript console.
- * There, you will see the results unit test execution. You are welcome
- * to run the code any way you like, but this is similar to how we will
- * run your code submission.
- * 
- * The Developer Tools in Chrome are available under the "..." menu, 
- * futher hidden under the option "More Tools." In Firefox, they are 
- * under the hamburger (three horizontal lines), also hidden under "More Tools." 
- */
 
 /**
  * Searches for matches in scanned text.
@@ -32,7 +19,6 @@
         //Return a comprehensible result but warn the user if inputs are bad.
         //Checks are also done through the for loops but this lets a user know something is up.
         console.warn("One or more inputs are blank!");
-        return result;
     }
 
     
@@ -42,6 +28,10 @@
     {
         book = scannedTextObj[bookListIter];
 
+        if ( book["Content"].length <= 0)
+        {
+            console.warn("Book " + book["ISBN"] + " with title " + book["Title"] + " has no content associated with it.");
+        }
         //Case where content is blank is covered in the for loop condition checking the length.
         for(let bookContentIter = 0; bookContentIter < book["Content"].length; bookContentIter++)
         {   
@@ -51,16 +41,16 @@
             //Check if any words spill off of the line.
             //If a word is between lines it is considered part of both lines.
             var lastCharacterOfLine = bookContent["Text"].slice(-1);
-            console.log(lastCharacterOfLine);
-            console.log(lastCharacterOfLine === "-");
+            //console.log(lastCharacterOfLine);
+            //console.log(lastCharacterOfLine === "-");
             
             var toSearch = bookContent["Text"];
             if(lastCharacterOfLine === "-" && bookContentIter + 1 < book["Content"].length)
             {
                 var restOfHyphenatedWord = book["Content"][bookContentIter + 1]["Text"].split(" ")[0];
-                console.log(restOfHyphenatedWord);
+                //console.log(restOfHyphenatedWord);
                 toSearch = toSearch.substring(0, toSearch.length - 1).concat(restOfHyphenatedWord);
-                console.log(toSearch);
+                //console.log(toSearch);
             }
 
             //console.log(bookContent["Text"]);
@@ -122,7 +112,18 @@ const twentyLeaguesIn = [
         ] 
     }
 ]
-    
+
+const twentyLeaguesInEmptyContent = [
+    {
+        "Title": "Twenty Thousand Leagues Under the Sea",
+        "ISBN": "9780000528531",
+        "Content": [
+        ] 
+    }
+]
+
+const emptyArr = []
+
 /** Example output object */
 const twentyLeaguesOut = {
     "SearchTerm": "the",
@@ -169,4 +170,54 @@ if (test2result.Results.length == 1) {
     console.log("FAIL: Test 2");
     console.log("Expected:", twentyLeaguesOut.Results.length);
     console.log("Received:", test2result.Results.length);
+}
+
+//Test hyphenated word detection.
+const test3result = findSearchTermInBooks("darkness", twentyLeaguesIn); 
+//Test for two results since hyphenated words are considered to be on both lines.
+if (test3result.Results.length == 2) {
+    console.log("PASS: Test 3");
+} else {
+    console.log("FAIL: Test 3");
+    console.log("Expected:", twentyLeaguesOut.Results.length);
+    console.log("Received:", test3result.Results.length);
+}
+
+
+//Make sure capitalization is sensitive.
+const test4result = findSearchTermInBooks("SIMPLY", twentyLeaguesIn); 
+if (test4result.Results.length == 0) {
+    console.log("PASS: Test 4");
+} else {
+    console.log("FAIL: Test 4");
+    console.log("Expected:", 0);
+    console.log("Received:", test4result.Results.length);
+}
+
+const test5result = findSearchTermInBooks("the", twentyLeaguesInEmptyContent); 
+if (test4result.Results.length == 0) {
+    console.log("PASS: Test 5");
+} else {
+    console.log("FAIL: Test 5");
+    console.log("Expected:", 0);
+    console.log("Received:", test4result.Results.length);
+}
+
+
+const test6result = findSearchTermInBooks("the", emptyArr); 
+if (test4result.Results.length == 0) {
+    console.log("PASS: Test 6");
+} else {
+    console.log("FAIL: Test 6");
+    console.log("Expected:", 0);
+    console.log("Received:", test4result.Results.length);
+}
+
+const test7result = findSearchTermInBooks("", twentyLeaguesIn); 
+if (test4result.Results.length == 0) {
+    console.log("PASS: Test 7");
+} else {
+    console.log("FAIL: Test 7");
+    console.log("Expected:", 0);
+    console.log("Received:", test4result.Results.length);
 }

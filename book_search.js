@@ -26,7 +26,7 @@
     //Loop Over input array if it is not empty 
     for(let bookListIter = 0; bookListIter < scannedTextObj.length; bookListIter++)
     {
-        book = scannedTextObj[bookListIter];
+        var book = scannedTextObj[bookListIter];
 
         if ( book["Content"].length <= 0)
         {
@@ -36,7 +36,7 @@
         for(let bookContentIter = 0; bookContentIter < book["Content"].length; bookContentIter++)
         {   
             //Isolate the content field.
-            bookContent = book["Content"][bookContentIter];
+            var bookContent = book["Content"][bookContentIter];
 
             //Check if any words spill off of the line.
             //If a word is between lines it is considered part of both lines.
@@ -49,7 +49,7 @@
             {
                 var restOfHyphenatedWord = book["Content"][bookContentIter + 1]["Text"].split(" ")[0];
                 //console.log(restOfHyphenatedWord);
-                toSearch = toSearch.substring(0, toSearch.length - 1).concat(restOfHyphenatedWord);
+                var toSearch = toSearch.substring(0, toSearch.length - 1).concat(restOfHyphenatedWord);
                 //console.log(toSearch);
             }
 
@@ -57,7 +57,7 @@
             //Just use js includes method to do a quick string search.
             if(toSearch.includes(searchTerm))
             {
-                occurance = {
+                var occurance = {
                     "ISBN" : book["ISBN"],
                     "Page" : bookContent["Page"],
                     "Line" : bookContent["Line"]
@@ -68,12 +68,12 @@
                 if(lastCharacterOfLine === "-" && bookContentIter + 1 < book["Content"].length)
                 {
                     var OtherPage = book["Content"][bookContentIter + 1]
-                    occurance = {
+                    var otherOccurance = {
                         "ISBN" : book["ISBN"],
                         "Page" : OtherPage["Page"],
                         "Line" : OtherPage["Line"]
                     };
-                    result["Results"].push(occurance);
+                    result["Results"].push(otherOccurance);
                 }
 
                 result["Results"].push(occurance);
@@ -145,12 +145,6 @@ const twentyLeaguesOut = {
                                                       
  */
 
-/* We have provided two unit tests. They're really just `if` statements that 
- * output to the console. We've provided two tests as examples, and 
- * they should pass with a correct implementation of `findSearchTermInBooks`. 
- * 
- * Please add your unit tests below.
- * */
 
 /** We can check that, given a known input, we get a known output. */
 const test1result = findSearchTermInBooks("the", twentyLeaguesIn);

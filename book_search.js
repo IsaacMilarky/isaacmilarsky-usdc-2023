@@ -19,6 +19,7 @@
         //Return a comprehensible result but warn the user if inputs are bad.
         //Checks are also done through the for loops but this lets a user know something is up.
         console.warn("One or more inputs are blank!");
+        return result;
     }
 
     
